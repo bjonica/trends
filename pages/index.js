@@ -48,11 +48,13 @@ class Index extends PureComponent {
 
   state = defaultState
 
-  static getInitialProps (ctx) {
+  static async getInitialProps (ctx) {
     const { language, time } = cookies(ctx)
 
     if (language) {
-      console.log({ language, time })
+      const { repos } = await getTrendingProjects(language, time)
+
+      return { repos }
     }
 
     return { }
@@ -94,9 +96,7 @@ class Index extends PureComponent {
   getTrending = async () => {
     this.setState({ loading: true })
 
-    const res = await get(`/trending?language=${this.state.language}&daysAgo=${this.state.time}`)
-
-    const { repos } = await res.data
+    const { repos } = await getTrendingProjects(this.state.language, this.state.time)
 
     this.setState({ loading: false, repos })
   }
@@ -122,6 +122,8 @@ class Index extends PureComponent {
   }
 
   render () {
+    const { repos } = this.state.repos.length ? this.state : this.props
+
     return (
       <Fragment>
         <Head title='gitwho' />
@@ -160,7 +162,7 @@ class Index extends PureComponent {
           <br />
 
           <Row>
-            {this.state.repos.map(repo => <Card expand={true} getEmail={this.getEmail} repo={repo} />)}
+            {repos.map(repo => <Card expand={true} getEmail={this.getEmail} repo={repo} />)}
           </Row>
 
           <Drawer open={this.state.email} onRequestClose={() => this.setState({ email: '' })} modalElementClass={DrawerCard}>
@@ -171,6 +173,12 @@ class Index extends PureComponent {
       </Fragment>
     )
   }
+}
+
+async function getTrendingProjects (language = defaultState.language, time = defaultState.time) {
+  const res = await get(`${process.env.NOW_URL || 'http://localhost:3000'}/trending?language=${language}&daysAgo=${time}`)
+
+  return await res.data
 }
 
 const hasFullHeight = withFullHeight(Index)
