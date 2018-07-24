@@ -1,6 +1,6 @@
 const languages = {
   "Top Overall": encodeURIComponent(
-    "javascript language:python language:ruby language:go language:html language:css language:java language:swift language:php language:rust"
+    "javascript language:python language:ruby language:go language:html language:css language:java language:swift language:php language:rust language:clojure"
   ),
   Javascript: "javascript",
   Go: "go",
@@ -12,7 +12,8 @@ const languages = {
   C: "C",
   Python: "python",
   Ruby: "ruby",
-  Java: "java"
+  Java: "java",
+  Clojure: "clojure"
 };
 
 const times = {
@@ -34,7 +35,8 @@ const themes = {
   C: "#3f51b5",
   Python: "#607d8b",
   Ruby: "#e91e63",
-  Java: "#795548"
+  Java: "#795548",
+  Clojure: "#90b4fe"
 };
 
 module.exports = {
